@@ -1,20 +1,23 @@
 {% macro columns_to_list() %}
 
-{% call statement(name='get_columns', fetch_result=True, auto_begin=False) %}
+{% set get_columns %}
+select
+  column_name
+from
+  `bigquery-public-data.covid19_usafacts`.INFORMATION_SCHEMA.COLUMNS
+where
+  table_name = 'confirmed_cases'
+  and starts_with(column_name, '_')
+{% endset %}
 
-    select
-      column_name
-    from
-      `bigquery-public-data.covid19_usafacts`.INFORMATION_SCHEMA.COLUMNS
-    where
-      table_name = 'confirmed_cases'
-      and starts_with(column_name, '_')
+{% set results = run_query(get_columns) %}
 
-{% endcall %}
+{{ log("results:" ~ results) }}
 
-{% set columns = load_result('get_columns') %}
-{% set column_list = columns['data'] %}
+{% set column_list = results %}
 
-{{ log(column_list) }}
+{{ log("column_list:" ~ column_list) }}
+
+{{ return(column_list) }}
 
 {% endmacro %}

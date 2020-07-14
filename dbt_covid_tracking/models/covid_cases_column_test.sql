@@ -1,3 +1,3 @@
-{{ columns_to_list() }}
+{{ relation_test() }}
 
 select 1 as field
