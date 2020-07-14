@@ -7,4 +7,12 @@
 {{ log("schema:" ~ relation2.schema)}}
 {{ log("database:" ~ relation2.database)}}
 
+{% set column_list = adapter.get_columns_in_relation(relation2) %}
+
+{{ log("column_list:" ~ column_list)}}
+
+{% for column in column_list %}
+  {{ log("column:" ~ column.name) }}
+{% endfor %}
+
 {% endmacro %}
