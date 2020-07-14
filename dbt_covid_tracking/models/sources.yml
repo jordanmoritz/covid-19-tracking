@@ -1,0 +1,6 @@
+version: 2
+
+sources:
+  - name: dbt_dev_jm
+    tables:
+      - name: county_cases_date_columns
