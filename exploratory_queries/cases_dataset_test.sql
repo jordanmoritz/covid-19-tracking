@@ -20,7 +20,9 @@ SELECT
 FROM
   `bigquery-public-data.covid19_usafacts.confirmed_cases`
 WHERE
-  DATE(_PARTITIONTIME) = "2020-07-13"
+  -- This has a weird format. Data is always only contained in
+  -- partition for today
+  DATE(_PARTITIONTIME) = CURRENT_DATE()
 --   AND date = '2020-03-18'
   AND state = 'OR'
   AND county_name = 'Linn County'
