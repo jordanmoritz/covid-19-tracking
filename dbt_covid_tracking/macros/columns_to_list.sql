@@ -1,23 +1,13 @@
-{% macro columns_to_list() %}
+{% macro columns_to_list(dataset_name, table_name) %}
 
-{% set get_columns %}
-select
-  column_name
-from
-  `bigquery-public-data.covid19_usafacts`.INFORMATION_SCHEMA.COLUMNS
-where
-  table_name = 'confirmed_cases'
-  and starts_with(column_name, '_')
-{% endset %}
+{% set relation = api.Relation.create(
+      schema=dataset_name,
+      identifier=table_name) %}
 
-{% set results = run_query(get_columns) %}
+{% set column_list = adapter.get_columns_in_relation(relation) %}
 
-{{ log("results:" ~ results) }}
-
-{% set column_list = results %}
-
-{{ log("column_list:" ~ column_list) }}
-
-{{ return(column_list) }}
+{% for column in column_list %}
+  {{ log("column_updated:" ~ column.name) }}
+{% endfor %}
 
 {% endmacro %}
