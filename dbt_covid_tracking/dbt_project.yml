@@ -34,3 +34,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   covid_19_tracking:
       materialized: table
+
+      cleansed:
+          +schema: cleansed
