@@ -1,6 +1,7 @@
 version: 2
 
 sources:
-  - name: dbt_dev_jm
+  - name: covid_sources
     tables:
-      - name: county_cases_date_columns
+      - name: usafacts_confirmed_cases
+      - name: usafacts_deaths
