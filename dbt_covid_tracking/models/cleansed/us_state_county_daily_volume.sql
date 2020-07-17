@@ -1,3 +1,10 @@
+{{
+  config(
+    materialized = 'incremental',
+    incremental_strategy = 'insert_overwrite'
+  )
+}}
+
 select
     cases.state_fips_code,
     cases.state_name,
