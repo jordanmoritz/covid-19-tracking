@@ -12,7 +12,7 @@ select
     parse_date('%m/%d/%y',
               '{{ column.split('_')[1] }}/{{ column.split('_')[2] }}/{{ column.split('_')[3] }}')
               as date,
-    {{ column }} as cases
+    {{ column }} as cumulative_cases
 from
     {{ source('covid_sources', 'usafacts_confirmed_cases') }}
 

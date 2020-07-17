@@ -15,7 +15,7 @@ select
     parse_date('%m/%d/%y',
               '{{ column.split('_')[1] }}/{{ column.split('_')[2] }}/{{ column.split('_')[3] }}')
               as date,
-    {{ column }} as deaths
+    {{ column }} as cumulative_deaths
 from
     {{ source('covid_sources', 'usafacts_deaths') }}
 
