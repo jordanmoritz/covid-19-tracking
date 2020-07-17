@@ -39,3 +39,6 @@ models:
           +partition_by:
               field: date
               data_type: date
+
+      presentation:
+          +schema: presentation
