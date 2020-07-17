@@ -5,8 +5,11 @@
 
 {% for column in columns_to_unpivot -%}
 select
-    state_fips_code,
-    state,
+    -- Some states have malformed codes for whatever reason
+    if(length(state_fips_code) = 3
+      , substr(state_fips_code, 2)
+      , state_fips_code) as state_fips_code,
+    state as state_name,
     county_fips_code,
     county_name,
     parse_date('%m/%d/%y',
