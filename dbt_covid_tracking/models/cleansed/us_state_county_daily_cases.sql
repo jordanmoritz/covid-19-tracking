@@ -1,3 +1,12 @@
+{{
+  config(
+    materialized = 'incremental',
+    incremental_strategy = 'insert_overwrite',
+    partition_by = {'field': 'date',
+                    'data_type': 'date'},
+  )
+}}
+
 {%- set columns_to_unpivot = columns_to_list(
     'covid_sources',
     'usafacts_confirmed_cases',
@@ -15,6 +24,9 @@ select
     {{ column }} as cumulative_cases
 from
     {{ source('covid_sources', 'usafacts_confirmed_cases') }}
+
+{%- if is_incremental() -%}
+where
 
 {%- if not loop.last %}
 union all

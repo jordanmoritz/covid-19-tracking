@@ -42,3 +42,6 @@ models:
 
       presentation:
           +schema: presentation
+          +partition_by:
+              field: date
+              data_type: date
