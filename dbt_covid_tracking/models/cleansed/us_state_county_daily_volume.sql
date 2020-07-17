@@ -25,4 +25,4 @@ on
 left join
     {{ source('mapping', 'us_states_fips_codes') }} as state_fips
 on
-    state_fips = cases.state_fips_code
+    state_fips.state_fips_code = cases.state_fips_code
