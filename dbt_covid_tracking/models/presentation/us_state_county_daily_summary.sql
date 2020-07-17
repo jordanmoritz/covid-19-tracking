@@ -4,6 +4,8 @@ select
     state_name,
     county_fips_code, -- including for distinct counts if needed
     county_name,
+    cumulative_cases,
+    cumulative_deaths,
     -- Navigation functions to determine daily new cases/usafacts_deaths
     -- based on diff between today cumulative and yesterday
     cumulative_cases - lead(cumulative_cases, 1, 0) over (county_daily) as new_cases,
