@@ -8,6 +8,7 @@
 select
     cases.state_fips_code,
     cases.state_abbreviation,
+    state_fips.state_name,
     cases.county_fips_code,
     cases.county_name,
     cases.date,
@@ -21,3 +22,7 @@ on
     cases.state_fips_code = deaths.state_fips_code
     and cases.county_fips_code = deaths.county_fips_code
     and cases.date = deaths.date
+left join
+    {{ source('mapping', 'us_states_fips_codes') }} as state_fips
+on
+    state_fips = cases.state_fips_code

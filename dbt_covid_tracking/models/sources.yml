@@ -5,3 +5,7 @@ sources:
     tables:
       - name: usafacts_confirmed_cases
       - name: usafacts_deaths
+
+  - name: mapping
+    tables:
+      - name: us_states_fips_codes
