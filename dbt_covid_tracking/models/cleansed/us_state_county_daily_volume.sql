@@ -7,12 +7,12 @@
 
 select
     cases.state_fips_code,
-    cases.state_name,
+    cases.state_abbreviation,
     cases.county_fips_code,
     cases.county_name,
     cases.date,
-    cases.cases,
-    deaths.deaths
+    cases.cumulative_cases,
+    deaths.cumulative_deaths
 from
     {{ ref('us_state_county_daily_cases') }} as cases
 left join

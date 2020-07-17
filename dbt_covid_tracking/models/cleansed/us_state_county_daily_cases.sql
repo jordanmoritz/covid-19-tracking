@@ -6,7 +6,7 @@
 {% for column in columns_to_unpivot -%}
 select
     state_fips_code,
-    state as state_name,
+    state as state_abbreviation,
     county_fips_code,
     county_name,
     parse_date('%m/%d/%y',

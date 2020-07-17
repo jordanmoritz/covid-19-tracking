@@ -9,7 +9,7 @@ select
     if(length(state_fips_code) = 3
       , substr(state_fips_code, 2)
       , state_fips_code) as state_fips_code,
-    state as state_name,
+    state as state_abbreviation,
     county_fips_code,
     county_name,
     parse_date('%m/%d/%y',
