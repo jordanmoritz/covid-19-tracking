@@ -7,6 +7,9 @@
   )
 }}
 
+{%- set max_partition_date = run_query('select 50 as id') -%}
+{{ log('testtttt:' ~ max_partition_date) }}
+
 {%- set columns_to_unpivot = columns_to_list(
     'covid_sources',
     'usafacts_confirmed_cases',
@@ -24,9 +27,6 @@ select
     {{ column }} as cumulative_cases
 from
     {{ source('covid_sources', 'usafacts_confirmed_cases') }}
-
-{%- if is_incremental() -%}
-where
 
 {%- if not loop.last %}
 union all

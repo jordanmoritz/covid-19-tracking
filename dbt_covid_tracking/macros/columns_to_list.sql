@@ -20,7 +20,7 @@ Args:
 
 {# Loop through columns in table, check against ignore list #}
 {% for column in table_column_list %}
-    {% if column.name.lower() not in ignore_columns|map('lower') %}
+    {% if column.name.lower() not in ignore_columns | map('lower') %}
         {% do column_list.append(column.name) %}
     {% endif %}
 {% endfor %}
