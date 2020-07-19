@@ -7,10 +7,14 @@
   )
 }}
 
-{%- set max_partition_date = run_query('select 50 as id') -%}
-{{ log('testtttt:' ~ max_partition_date) }}
-
+{%- set max_partition_date = max_date_value(
+    'big-query-horse-play',
+    'dbt_covid_dev_cleansed',
+    'us_state_county_daily_cases',
+    'date') -%}
+{{ log('part_date:' ~max_partition_date) }}
 {%- set columns_to_unpivot = columns_to_list(
+    'big-query-horse-play',
     'covid_sources',
     'usafacts_confirmed_cases',
     ignore=['state', 'state_fips_code', 'county_name', 'county_fips_code']) -%}

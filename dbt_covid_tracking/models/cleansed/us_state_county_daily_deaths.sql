@@ -1,4 +1,6 @@
+
 {%- set columns_to_unpivot = columns_to_list(
+    'big-query-horse-play',
     'covid_sources',
     'usafacts_deaths',
     ignore=['state', 'state_fips_code', 'county_name', 'county_fips_code']) -%}

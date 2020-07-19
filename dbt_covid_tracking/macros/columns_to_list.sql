@@ -2,15 +2,17 @@
 Returns list of columns from a table.
 
 Args:
+    project_name: GCP project identifier
     dataset_name: BigQuery dataset name
     table_name: BigQuery table name
     ignore: List of columnns to ignore from list
 #}
 
-{% macro columns_to_list(dataset_name, table_name, ignore=none) %}
+{% macro columns_to_list(project_name, dataset_name, table_name, ignore=none) %}
 
 {# Uses input to construct relation object and retrieve columns #}
-{%- set relation = api.Relation.create(
+{%- set relation = adapter.get_relation(
+      database=project_name,
       schema=dataset_name,
       identifier=table_name) -%}
 
