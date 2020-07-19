@@ -1,8 +1,6 @@
-{%- call statement('max_partition_date', fetch_result=true) -%}
-    select '1' as id
-{%- endcall -%}
+{%- set max_partition_date = max_date_value(
+    'dbt_covid_dev_cleansed',
+    'us_state_county_daily_cases',
+    'date') -%}
 
-{%- set results = load_result('max_partition_date') -%}
-{{ log('results:' ~ results['data'] | list()) }}
-
-select max(date) as max_date from {{ ref('us_state_county_daily_cases') }}
+select '{{ max_partition_date }}' as test
