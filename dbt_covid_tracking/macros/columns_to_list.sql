@@ -8,11 +8,11 @@ Args:
     ignore: List of columnns to ignore from list
 #}
 
-{% macro columns_to_list(project_name, dataset_name, table_name, ignore=none) %}
+{% macro columns_to_list(project_id, dataset_name, table_name, ignore=none) %}
 
 {# Uses input to construct relation object and retrieve columns #}
 {%- set relation = adapter.get_relation(
-      database=project_name,
+      database=project_id,
       schema=dataset_name,
       identifier=table_name) -%}
 
