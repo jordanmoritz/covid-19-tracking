@@ -15,6 +15,13 @@
 
 {{ log('dates:' ~ columns_to_unpivot | last() ) }}
 
+
+
+
+{%- set cols_to_unpivot = get_dates_to_unpivot(columns_to_unpivot, max_partition_date) -%}
+{{ log('macro_results:' ~ cols_to_unpivot) }}
+
+
 with source_dates as (
 {% for column in columns_to_unpivot -%}
 select
