@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: us_state_county_daily_cases
+    description: '{{ doc("daily_cases_deaths_incremental") }}'
+  - name: us_state_county_daily_deaths
+    description: '{{ doc("daily_cases_deaths_incremental") }}'
