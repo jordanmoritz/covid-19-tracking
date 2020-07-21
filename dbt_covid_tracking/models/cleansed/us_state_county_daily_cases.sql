@@ -31,7 +31,7 @@
         county_fips_code,
         county_name,
 
-        {%- set date_parts = column.split('_') -%}
+        {%- set date_parts = column.split('_') %}
         parse_date('%m/%d/%y',
                   '{{ date_parts[1] }}/{{ date_parts[2] }}/{{ date_parts[3] }}')
                   as date,
@@ -51,9 +51,6 @@
     so we dont rebuild the entire table for no reason #}
     {%- set dates_to_unpivot = get_dates_to_unpivot(columns_to_unpivot, max_partition_date) -%}
 
-{%- endif -%}
-
-{%- if dates_to_unpivot is not none -%}
     {% for date in dates_to_unpivot -%}
     select
         state_fips_code,

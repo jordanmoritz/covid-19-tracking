@@ -13,10 +13,12 @@ Args:
 {%- set date_string = date_value | string -%}
 {%- set date_split = date_string.split('-') -%}
 
+{# Year #}
 {%- set year = date_split[0] -%}
 {%- set year_chars = year | list() -%}
 {%- set year_formatted = year_chars[2] ~ year_chars[3] -%}
 
+{# Month #}
 {%- set month = date_split[1] -%}
 {%- set month_chars = month | list() -%}
 {%- if month_chars[0] == '0' -%}
@@ -25,6 +27,7 @@ Args:
     {%- set month_formatted = month -%}
 {%- endif -%}
 
+{# Day #}
 {%- set day_formatted = date_split[2] -%}
 
 {%- set formatted_date_column = '_' ~ month_formatted ~ '_' ~ day_formatted ~ '_' ~ year_formatted -%}

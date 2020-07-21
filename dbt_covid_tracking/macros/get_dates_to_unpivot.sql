@@ -17,7 +17,8 @@ and compares that against the current max date #}
 
     {% for column in column_list -%}
       select
-          {%- set date_parts = column.split('_') -%}
+
+          {%- set date_parts = column.split('_') %}
           parse_date('%m/%d/%y',
                   '{{ date_parts[1] }}/{{ date_parts[2] }}/{{ date_parts[3] }}')
                   as source_date
