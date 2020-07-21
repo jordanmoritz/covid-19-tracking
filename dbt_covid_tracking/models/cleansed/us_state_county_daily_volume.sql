@@ -16,7 +16,7 @@ select
     deaths.cumulative_deaths
 from
     {{ ref('us_state_county_daily_cases') }} as cases
-left join
+inner join
     {{ ref('us_state_county_daily_deaths') }} as deaths
 on
     cases.state_fips_code = deaths.state_fips_code
