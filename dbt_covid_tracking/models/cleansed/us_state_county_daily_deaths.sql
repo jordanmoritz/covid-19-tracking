@@ -1,3 +1,9 @@
+{{
+  config(
+    materialized = 'incremental',
+    incremental_strategy = 'insert_overwrite'
+  )
+}}
 
 {%- set columns_to_unpivot = columns_to_list(
     'big-query-horse-play',
