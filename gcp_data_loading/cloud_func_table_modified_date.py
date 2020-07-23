@@ -1,40 +1,90 @@
+
 from google.cloud import bigquery
 
-destination_client = bigquery.Client()
-public_client = bigquery.Client(project='bigquery-public-data')
-
-# For destination tables
+# These can move to environment variables when deployed
+destination_project_id = 'big-query-horse-play'
 destination_dataset_id = 'covid_sources'
 destination_tables_to_check = ['usafacts_confirmed_cases', 'usafacts_deaths']
 
-# For source tables
+source_project_id = 'bigquery-public-data'
 source_dataset_id = 'covid19_usafacts'
 source_tables_to_check = ['confirmed_cases', 'deaths']
 
-def get_tables_from_dataset(dataset_id, table_names, client):
+class DataSource:
     """
-    Uses dataset id, list of table names to get BQ table object
+    Uses destination and source identifiers to construct object for updating
+    data sources.
     """
-    dataset = client.get_dataset(dataset_id)
-    table_list = []
-    for table in table_names:
-        table_ref = dataset.table(table)
-        table_list.append(client.get_table(table_ref))
+    def __init__(self, dest_project, dest_dataset, dest_table,
+                source_project, source_dataset, source_table):
+        """
+        Args:
+            dest_project: Unqualified destination GCP Project id
+            dest_dataset: Unqualified destination Dataset id
+            dest_table: Unqualified destination Table name
+            source_project: Unqualified source GCP Project id
+            source_dataset: Unqualified source Dataset id
+            source_table: Unqualified source Table name
+        """
+        self.destination_project_id = dest_project
+        self.destination_dataset_id = dest_dataset
+        self.destination_table_name = dest_table
+        self.destination_client = self.get_client(project_id=self.destination_project_id)
+        self.destination_dataset = self.get_dataset(self.destination_client,
+                                                    self.destination_dataset_id)
+        self.destination_table = self.get_table(self.destination_client,
+                                                self.destination_dataset,
+                                                self.destination_table_name)
 
-    return table_list
+        self.source_project_id = source_project
+        self.source_dataset_id = source_dataset
+        self.source_table_name = source_table
+        self.source_client = self.get_client(project_id=self.source_project_id)
+        self.source_dataset = self.get_dataset(self.source_client, self.source_dataset_id)
+        self.source_table = self.get_table(self.source_client,
+                                        self.source_dataset,
+                                        self.source_table_name)
 
-destination_tables = get_tables_from_dataset(destination_dataset, destination_tables_to_check, client)
-source_tables = get_tables_from_dataset(usafacts_dataset, usafacts_tables_to_check, public_client)
+        self.update = self.update_required(self.destination_table, self.source_table)
 
-def compare_table_dates(first_table, second_table):
-    if first_table > second_table:
-        return True
+    # Attaching these here for invoking on init
+    def get_client(self, project_id):
+        client_name = bigquery.Client(project=project_id)
+        return client_name
+
+    def get_dataset(self, client, dataset_id):
+        dataset = client.get_dataset(dataset_id)
+        return dataset
+
+    def get_table(self, client, dataset, table_name):
+        table_ref = dataset.table(table_name)
+        table = client.get_table(table_ref)
+        return table
+
+    def update_required(self, destination_table, source_table):
+        if destination_table.modified < source_table.modified:
+            return True
+        else:
+            return False
 
 
+query = f'SELECT * FROM `{project}`.`{dataset}`.`{table}`'
+def update_data_source(data_source):
+    if data_source.update is True:
 
-for table
-test_fact_date = usafacts_tables[0].modified
-test_dest_date = destination_tables[0].modified
 
-test_fact_date > test_dest_date
-# returns true as expected
+cases = DataSource(
+                destination_project_id,
+                destination_dataset_id,
+                destination_tables_to_check[0],
+                source_project_id,
+                source_dataset_id,
+                source_tables_to_check[0])
+
+deaths = DataSource(
+                destination_project_id,
+                destination_dataset_id,
+                destination_tables_to_check[1],
+                source_project_id,
+                source_dataset_id,
+                source_tables_to_check[1])
