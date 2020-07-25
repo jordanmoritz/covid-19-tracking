@@ -35,25 +35,12 @@ class DataSource:
         self.destination_dataset = self.get_dataset(self.destination_client,
                                                     self.destination_dataset_id)
 
-        # Simple handling in case table does not currently exist
-        try:
-            self.destination_table = self.get_table(self.destination_client,
-                                                    self.destination_dataset,
-                                                    self.destination_table_name)
-        except:
-            self.destination_table = None
-
         self.source_project_id = source_project
         self.source_dataset_id = source_dataset
         self.source_table_name = source_table
         self.source_fully_qualified_table_name = f'{source_project}.{source_dataset}.{source_table}'
         self.source_client = self.get_client(project_id=self.source_project_id)
         self.source_dataset = self.get_dataset(self.source_client, self.source_dataset_id)
-        self.source_table = self.get_table(self.source_client,
-                                        self.source_dataset,
-                                        self.source_table_name)
-
-        self.update_required = self.update_required(self.destination_table, self.source_table)
 
     # Attaching these here for invoking on init
     def get_client(self, project_id):
@@ -64,20 +51,20 @@ class DataSource:
         dataset = client.get_dataset(dataset_id)
         return dataset
 
+    # For handling data source updates
     def get_table(self, client, dataset, table_name):
         table_ref = dataset.table(table_name)
         table = client.get_table(table_ref)
         return table
 
-    def update_required(self, destination_table, source_table):
-        if not destination_table:
+    def check_update_required(self):
+        if not self.destination_table:
             return True
-        elif destination_table.modified < source_table.modified or not destination_table:
+        elif self.destination_table.modified < self.source_table.modified or not self.destination_table:
             return True
         else:
             return False
 
-    # For handling data source updates
     def update_job_config(self):
         job_config = bigquery.QueryJobConfig(
                         destination=f'{self.destination_fully_qualified_table_name}',
@@ -92,7 +79,24 @@ class DataSource:
         query_job.result()
 
 def check_data_source_update(data_source_list):
+    # Handling this piece here because of cache behavior of global variables
     for data_source in data_source_list:
+
+        # Simple handling in case table does not currently exist
+        try:
+            data_source.destination_table = data_source.get_table(
+                                                    data_source.destination_client,
+                                                    data_source.destination_dataset,
+                                                    data_source.destination_table_name)
+        except:
+            data_source.destination_table = None
+
+        data_source.source_table = data_source.get_table(data_source.source_client,
+                                        data_source.source_dataset,
+                                        data_source.source_table_name)
+
+        data_source.update_required = data_source.check_update_required()
+
         if data_source.update_required is True:
             data_source.job_config = data_source.update_job_config()
             data_source.update_data_source(data_source.job_config)
