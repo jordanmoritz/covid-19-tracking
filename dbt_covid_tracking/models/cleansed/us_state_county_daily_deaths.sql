@@ -23,13 +23,8 @@
     {# Then construct this model using entire column list from source table #}
     {% for column in columns_to_unpivot -%}
     select
-        -- Some states have malformed codes for whatever reason
-        if(length(state_fips_code) = 3
-          , substr(state_fips_code, 2)
-          , state_fips_code) as state_fips_code,
-        state as state_abbreviation,
-        county_fips_code,
-        county_name,
+
+        {{ county_daily_column_select() }}
 
         {%- set date_parts = column.split('_') %}
         parse_date('%m/%d/%y',
@@ -53,10 +48,9 @@ so we dont rebuild the entire table for no reason #}
 
     {% for date in dates_to_unpivot -%}
     select
-        state_fips_code,
-        state as state_abbreviation,
-        county_fips_code,
-        county_name,
+
+        {{ county_daily_column_select() }}
+
         date '{{ date }}' as date,
         {# Have to reconstruct date column name from date value #}
         {{ format_date_column(date) }} as cumulative_deaths

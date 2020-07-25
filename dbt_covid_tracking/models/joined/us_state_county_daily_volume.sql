@@ -20,7 +20,7 @@ select
     cases.state_fips_code,
     cases.state_abbreviation,
     state_fips.state_name,
-    cases.county_fips_code,
+    cases.county_geo_id,
     cases.county_name,
     cases.date,
     cases.cumulative_cases,
@@ -31,7 +31,7 @@ inner join
     {{ ref('us_state_county_daily_deaths') }} as deaths
 on
     cases.state_fips_code = deaths.state_fips_code
-    and cases.county_fips_code = deaths.county_fips_code
+    and cases.county_geo_id = deaths.county_geo_id
     and cases.date = deaths.date
 left join
     {{ source('mapping', 'us_states_fips_codes') }} as state_fips
