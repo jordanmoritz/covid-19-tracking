@@ -2,7 +2,7 @@
 select
     date,
     state_name,
-    county_fips_code, -- including for distinct counts if needed
+    county_geo_id, -- including for distinct counts if needed
     county_name,
     cumulative_cases,
     cumulative_deaths,

@@ -40,6 +40,12 @@ models:
               field: date
               data_type: date
 
+      joined:
+          +schema: joined
+          + partition_by:
+              field: date
+              data_type: date
+
       presentation:
           +schema: presentation
           +partition_by:
