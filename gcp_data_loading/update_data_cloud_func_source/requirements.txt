@@ -1,0 +1,2 @@
+# package>=version
+google-cloud-bigquery==1.25.0

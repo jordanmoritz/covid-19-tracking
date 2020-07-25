@@ -1,7 +1,8 @@
 
 from google.cloud import bigquery
 
-# These can move to environment variables when deployed
+# These can move to environment variables or parsed
+# from request/event data when deployed
 destination_project_id = 'big-query-horse-play'
 destination_dataset_id = 'covid_sources'
 destination_tables_to_check = ['usafacts_confirmed_cases', 'usafacts_deaths']
@@ -90,6 +91,16 @@ class DataSource:
         query_job = self.destination_client.query(query, job_config=job_config)
         query_job.result()
 
+def check_data_source_update(data_source_list):
+    for data_source in data_source_list:
+        if data_source.update_required is True:
+            data_source.job_config = data_source.update_job_config()
+            data_source.update_data_source(data_source.job_config)
+            print('Data Source Updated: ', f'{data_source.destination_fully_qualified_table_name}')
+        else:
+            print('Data Source not updated, source table not refreshed:\n',
+                    f'{data_source.source_fully_qualified_table_name}')
+
 cases = DataSource(
                 destination_project_id,
                 destination_dataset_id,
@@ -108,11 +119,10 @@ deaths = DataSource(
 
 data_source_list = [cases, deaths]
 
-for data_source in data_source_list:
-    if data_source.update_required is True:
-        data_source.job_config = data_source.update_job_config()
-        data_source.update_data_source(data_source.job_config)
-        print('Data Source Updated: ', f'{data_source.destination_fully_qualified_table_name}')
-    else:
-        print('Data Source not updated, source table not refreshed:\n',
-                f'{data_source.source_fully_qualified_table_name}')
+# In normal circumstances would likely be parsing through legitimate
+# request/event data to drive the function, but just spoofing behavior with this
+def main(request):
+    if request:
+        check_data_source_update(data_source_list)
+        # Acknowleding request
+        return 'Received'
