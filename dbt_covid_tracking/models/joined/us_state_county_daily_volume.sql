@@ -12,17 +12,18 @@ expontentially more expensive than providing the string value as var
 #}
 {%- set max_partition_date = max_date_value(
     'big-query-horse-play',
-    'dbt_covid_dev_cleansed',
+    'dbt_covid_dev_joined',
     'us_state_county_daily_volume',
     'date') -%}
 
 select
+    cases.date,
     cases.state_fips_code,
     cases.state_abbreviation,
     state.state_name,
     cases.county_geo_id,
     county.county_name,
-    cases.date,
+    CAST(county_pop.total_pop AS INT64) AS county_population,
     cases.cumulative_cases,
     deaths.cumulative_deaths
 from
@@ -44,6 +45,11 @@ left join
     {{ source('mapping', 'us_county_fips_codes') }} as county
 on
     county.geo_id = cases.county_geo_id
+
+left join
+    {{ source('mapping', 'us_county_pop_2018_5yr_census') }} as county_pop
+on
+    county_pop.geo_id = cases.county_geo_id
 
 {% if is_incremental() and max_partition_date is not none %}
 where
