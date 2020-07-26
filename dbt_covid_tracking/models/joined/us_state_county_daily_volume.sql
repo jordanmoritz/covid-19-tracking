@@ -23,7 +23,7 @@ select
     state.state_name,
     cases.county_geo_id,
     county.county_name,
-    CAST(county_pop.total_pop AS INT64) AS county_population,
+    county_pop.total_pop AS county_population,
     cases.cumulative_cases,
     deaths.cumulative_deaths
 from
