@@ -5,6 +5,7 @@ sources:
     tables:
       - name: usafacts_confirmed_cases
       - name: usafacts_deaths
+      - name: ecdc_daily_country_volume
 
   - name: mapping
     tables:

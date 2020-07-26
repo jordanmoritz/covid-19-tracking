@@ -5,11 +5,15 @@ from google.cloud import bigquery
 # from request/event data when deployed
 destination_project_id = 'big-query-horse-play'
 destination_dataset_id = 'covid_sources'
-destination_tables_to_check = ['usafacts_confirmed_cases', 'usafacts_deaths']
+destination_tables_to_check = ['usafacts_confirmed_cases',
+                                'usafacts_deaths',
+                                'ecdc_daily_country_volume']
 
 source_project_id = 'bigquery-public-data'
-source_dataset_id = 'covid19_usafacts'
-source_tables_to_check = ['confirmed_cases', 'deaths']
+source_dataset_id = ['covid19_usafacts', 'covid19_ecdc']
+source_tables_to_check = ['confirmed_cases',
+                        'deaths',
+                        'covid_19_geographic_distribution_worldwide']
 
 class DataSource:
     """
@@ -105,23 +109,31 @@ def check_data_source_update(data_source_list):
             print('Data Source not updated, source table not refreshed:\n',
                     f'{data_source.source_fully_qualified_table_name}')
 
-cases = DataSource(
+state_county_cases = DataSource(
                 destination_project_id,
                 destination_dataset_id,
                 destination_tables_to_check[0],
                 source_project_id,
-                source_dataset_id,
+                source_dataset_id[0],
                 source_tables_to_check[0])
 
-deaths = DataSource(
+state_county_deaths = DataSource(
                 destination_project_id,
                 destination_dataset_id,
                 destination_tables_to_check[1],
                 source_project_id,
-                source_dataset_id,
+                source_dataset_id[0],
                 source_tables_to_check[1])
 
-data_source_list = [cases, deaths]
+country_daily_volume = DataSource(
+                destination_project_id,
+                destination_dataset_id,
+                destination_tables_to_check[2],
+                source_project_id,
+                source_dataset_id[1],
+                source_tables_to_check[2])
+
+data_source_list = [state_county_cases, state_county_deaths, country_daily_volume]
 
 # In normal circumstances would likely be parsing through legitimate
 # request/event data to drive the function, but just spoofing behavior with this
@@ -129,4 +141,4 @@ def main(request):
     if request:
         check_data_source_update(data_source_list)
         # Acknowleding request
-        return 'Received'
+        return 'Roger that'
