@@ -9,3 +9,4 @@ sources:
   - name: mapping
     tables:
       - name: us_states_fips_codes
+      - name: us_county_fips_codes

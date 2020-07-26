@@ -19,24 +19,31 @@ expontentially more expensive than providing the string value as var
 select
     cases.state_fips_code,
     cases.state_abbreviation,
-    state_fips.state_name,
+    state.state_name,
     cases.county_geo_id,
-    cases.county_name,
+    county.county_name,
     cases.date,
     cases.cumulative_cases,
     deaths.cumulative_deaths
 from
     {{ ref('us_state_county_daily_cases') }} as cases
+
 inner join
     {{ ref('us_state_county_daily_deaths') }} as deaths
 on
     cases.state_fips_code = deaths.state_fips_code
     and cases.county_geo_id = deaths.county_geo_id
     and cases.date = deaths.date
+
 left join
-    {{ source('mapping', 'us_states_fips_codes') }} as state_fips
+    {{ source('mapping', 'us_states_fips_codes') }} as state
 on
-    state_fips.state_fips_code = cases.state_fips_code
+    state.state_fips_code = cases.state_fips_code
+
+left join
+    {{ source('mapping', 'us_county_fips_codes') }} as county
+on
+    county.geo_id = cases.county_geo_id
 
 {% if is_incremental() and max_partition_date is not none %}
 where
