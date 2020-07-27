@@ -8,13 +8,13 @@
 {%- set max_partition_date = max_date_value(
     'big-query-horse-play',
     'dbt_covid_dev_cleansed',
-    'us_state_county_daily_cases',
+    'usafacts_us_state_county_daily_deaths',
     'date') -%}
 
 {%- set columns_to_unpivot = columns_to_list(
     'big-query-horse-play',
     'covid_sources',
-    'usafacts_confirmed_cases',
+    'usafacts_deaths',
     ignore=['state', 'state_fips_code', 'county_name', 'county_fips_code']) -%}
 
 {# In case where cleansed table is not currently built #}
@@ -24,15 +24,16 @@
     {% for column in columns_to_unpivot -%}
     select
 
-        {{ county_daily_column_select() }}
-
         {%- set date_parts = column.split('_') %}
         parse_date('%m/%d/%y',
                   '{{ date_parts[1] }}/{{ date_parts[2] }}/{{ date_parts[3] }}')
                   as date,
-        {{ column }} as cumulative_cases
+
+        {{ county_daily_column_select() }}
+
+        {{ column }} as cumulative_deaths
     from
-        {{ source('covid_sources', 'usafacts_confirmed_cases') }}
+        {{ source('covid_sources', 'usafacts_deaths') }}
 
     {%- if not loop.last %}
     union all
@@ -48,14 +49,13 @@ so we dont rebuild the entire table for no reason #}
 
     {% for date in dates_to_unpivot -%}
     select
-
-        {{ county_daily_column_select() }}
-
         date '{{ date }}' as date,
+        {# Grabs every other column we care about #}
+        {{ county_daily_column_select() }}
         {# Have to reconstruct date column name from date value #}
-        {{ format_date_column(date) }} as cumulative_cases
+        {{ format_date_column(date) }} as cumulative_deaths
     from
-        {{ source('covid_sources', 'usafacts_confirmed_cases') }}
+        {{ source('covid_sources', 'usafacts_deaths') }}
 
     {%- if not loop.last %}
     union all
