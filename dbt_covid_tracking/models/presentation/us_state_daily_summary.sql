@@ -11,7 +11,8 @@ from
     {{ ref('us_state_county_daily_volume') }}
 group by
     date,
-    state_name
+    state_name,
+    state_population
 ),
 
 -- Using aggregated to calculate daily new_cases/deaths
