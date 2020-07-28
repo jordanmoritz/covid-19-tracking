@@ -14,7 +14,11 @@ select
     sum(new_cases) over (country_7_days) as new_cases_last_7,
     round(avg(new_cases) over (country_7_days), 2) as avg_daily_new_cases_last_7,
     sum(new_deaths) over (country_7_days) as new_deaths_last_7,
-    round(avg(new_deaths) over (country_7_days), 2) as avg_daily_deaths_cases_last_7
+    round(avg(new_deaths) over (country_7_days), 2) as avg_daily_deaths_cases_last_7,
+    -- To identify most recent date's data
+    -- Should prevent need to re-aggregate on front-end
+    if(max(date) over (partition by country_territory_name) = date
+        , 1, 0) as most_recent_date
 from
     {{ ref('ecdc_country_daily_volume') }} as country
 window
