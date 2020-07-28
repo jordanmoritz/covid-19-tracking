@@ -22,7 +22,7 @@ select
     cases.state_abbreviation,
     state.state_name,
     cases.county_geo_id,
-    county.county_name,
+    ifnull(county.county_name, 'Undefined') as county_name,
     county_pop.total_pop AS county_population,
     cases.cumulative_cases,
     deaths.cumulative_deaths
