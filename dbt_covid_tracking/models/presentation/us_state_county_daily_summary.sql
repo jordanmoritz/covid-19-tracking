@@ -32,7 +32,7 @@ select
     sum(new_cases) over (county_7_days) as new_cases_last_7,
     round(avg(new_cases) over (county_7_days), 2) as avg_daily_new_cases_last_7,
     sum(new_deaths) over (county_7_days) as new_deaths_last_7,
-    round(avg(new_deaths) over (county_7_days), 2) as avg_daily_deaths_cases_last_7,
+    round(avg(new_deaths) over (county_7_days), 2) as avg_daily_new_deaths_last_7,
     -- Keeping consistent with other table schemas
     most_recent_date
 from
