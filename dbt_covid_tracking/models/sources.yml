@@ -12,3 +12,4 @@ sources:
       - name: us_states_fips_codes
       - name: us_county_fips_codes
       - name: us_county_pop_2018_5yr_census
+      - name: country_codes
