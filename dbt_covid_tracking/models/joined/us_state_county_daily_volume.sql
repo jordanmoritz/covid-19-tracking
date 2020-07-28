@@ -21,9 +21,10 @@ select
     cases.state_fips_code,
     cases.state_abbreviation,
     state.state_name,
+    state_pop.total_pop as state_population,
     cases.county_geo_id,
     ifnull(county.county_name, 'Undefined') as county_name,
-    county_pop.total_pop AS county_population,
+    county_pop.total_pop as county_population,
     cases.cumulative_cases,
     deaths.cumulative_deaths
 from
@@ -50,6 +51,12 @@ left join
     {{ source('mapping', 'us_county_pop_2018_5yr_census') }} as county_pop
 on
     county_pop.geo_id = cases.county_geo_id
+
+-- Need to also pull in state pop because can't guarantee every county reports
+left join
+    {{ source('mapping', 'us_state_pop_2018_5yr_census') }} as state_pop
+on
+    state_pop.state_fips_code = cases.state_fips_code
 
 {% if is_incremental() and max_partition_date is not none %}
 where
