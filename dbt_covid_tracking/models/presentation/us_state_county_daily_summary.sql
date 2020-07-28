@@ -4,6 +4,7 @@ with new_calcs as (
 select
     date,
     state_name,
+    state_population,
     county_geo_id, -- including for distinct counts if needed
     county_name,
     county_population,

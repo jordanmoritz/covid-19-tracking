@@ -4,7 +4,7 @@ with state as (
 select
     date,
     state_name,
-    sum(county_population) AS state_population,
+    state_population,
     sum(cumulative_cases) AS cumulative_cases,
     sum(cumulative_deaths) AS cumulative_deaths,
 from
