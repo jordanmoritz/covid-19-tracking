@@ -38,8 +38,8 @@ select
     country_data.pop_data_2019 as country_territory_population,
     country_data.confirmed_cases as cumulative_cases,
     country_data.deaths as cumulative_deaths,
-    country_data.daily_confirmed_cases as new_cases,
-    country_data.daily_deaths as new_deaths
+    country_data.daily_confirmed_cases as daily_new_cases,
+    country_data.daily_deaths as daily_new_deaths
 from
     {{ source('covid_sources', 'ecdc_daily_country_volume')}} as country_data
 

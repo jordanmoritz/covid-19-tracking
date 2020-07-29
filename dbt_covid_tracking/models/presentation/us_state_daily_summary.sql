@@ -21,8 +21,8 @@ select
     state.*,
     -- Navigation functions to determine daily new cases/deaths
     -- based on diff between today cumulative and yesterday
-    cumulative_cases - lead(cumulative_cases, 1, 0) over (state_daily) as new_cases,
-    cumulative_deaths - lead(cumulative_deaths, 1, 0) over (state_daily) as new_deaths,
+    cumulative_cases - lead(cumulative_cases, 1, 0) over (state_daily) as daily_new_cases,
+    cumulative_deaths - lead(cumulative_deaths, 1, 0) over (state_daily) as daily_new_deaths,
     -- Per capita related calcs
     round((cumulative_cases / state_population) * 100000, 2) AS cases_per_100k,
     round((cumulative_deaths / state_population) * 100000, 2) AS deaths_per_100k,
@@ -34,15 +34,17 @@ from
     state
 window
     state_daily as (partition by state_name order by date desc)
-)
+),
 
+-- Calculating rolling metrics
+rolling as (
 select
     new_calcs.* except(most_recent_date),
     -- Using new cases/deaths to calculate rolling metrics
-    sum(new_cases) over (state_7_days) as new_cases_last_7,
-    round(avg(new_cases) over (state_7_days), 2) as avg_daily_new_cases_last_7,
-    sum(new_deaths) over (state_7_days) as new_deaths_last_7,
-    round(avg(new_deaths) over (state_7_days), 2) as avg_daily_new_deaths_last_7,
+    sum(daily_new_cases) over (state_7_days) as new_cases_last_7,
+    round(avg(daily_new_cases) over (state_7_days), 2) as avg_daily_new_cases_last_7,
+    sum(daily_new_deaths) over (state_7_days) as new_deaths_last_7,
+    round(avg(daily_new_deaths) over (state_7_days), 2) as avg_daily_new_deaths_last_7,
     -- Keeping consistent with other table schemas
     most_recent_date
 from
@@ -55,3 +57,18 @@ window
             date desc
         rows between current row and 6 following
     )
+)
+
+-- Using rolling CTE to calculate population adjusted rolling metrics
+select
+    rolling.*,
+    round((new_cases_last_7 / state_population) * 100000
+          , 2) AS new_cases_last_7_per_100k,
+    round((avg_daily_new_cases_last_7 / state_population) * 100000
+          , 2) AS avg_daily_new_cases_last_7_per_100k,
+    round((new_deaths_last_7 / state_population) * 100000
+          , 2) AS new_deaths_last_7_per_100k,
+    round((avg_daily_new_deaths_last_7 / state_population) * 100000
+          , 2) AS avg_daily_new_deaths_last_7_per_100k,
+from
+    rolling
