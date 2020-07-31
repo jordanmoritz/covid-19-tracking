@@ -22,7 +22,7 @@ select
     if(max(date) over (partition by country_territory_name) = date
         , 1, 0) as most_recent_date
 from
-    {{ ref('ecdc_country_daily_volume') }} as country
+    {{ ref('country_daily_volume') }} as country
 window
     country_7_days as (
         partition by
