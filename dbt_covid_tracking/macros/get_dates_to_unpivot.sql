@@ -37,8 +37,8 @@ and compares that against the current max date #}
 
     {% if max_partition_date is not none -%}
     where
-        -- Greater and equal incase previous day was re-stated
-        source_date >= '{{ max_partition_date }}'
+        -- Date_sub to catch re-stating of previous days
+        source_date >= DATE_SUB('{{ max_partition_date }}', INTERVAL 3 DAY)
     {%- endif %}
 
 {%- endcall -%}
