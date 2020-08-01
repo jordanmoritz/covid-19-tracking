@@ -8,7 +8,10 @@ select
 
     {{ calculate_rolling_metrics('country_7_days') }}
 
-    {{ calculate_most_recent_date('country_7_days') }}
+    -- To identify most recent date's data
+    -- Should prevent need to re-aggregate on front-end
+    if(max(date) over (partition by country_territory_name) = date
+        , 1, 0) as most_recent_date
 
 from
     {{ ref('ecdc_country_daily_volume') }} as country

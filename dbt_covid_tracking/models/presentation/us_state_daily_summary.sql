@@ -23,7 +23,10 @@ select
 
     {{ calculate_per_capita_metrics('state_population') }}
 
-    {{ calculate_most_recent_date('state_daily') }}
+    -- To identify most recent date's data
+    -- Should prevent need to re-aggregate on front-end
+    if(max(date) over (partition by state_name) = date
+        , 1, 0) as most_recent_date
 
 from
     state

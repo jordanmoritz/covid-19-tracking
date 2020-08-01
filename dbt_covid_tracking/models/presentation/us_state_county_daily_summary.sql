@@ -15,7 +15,10 @@ select
 
     {{ calculate_per_capita_metrics('county_population') }}
 
-    {{ calculate_most_recent_date('county_daily') }}
+    -- To identify most recent date's data
+    -- Should prevent need to re-aggregate on front-end
+    if(max(date) over (partition by state_abbreviation, county_name) = date
+        , 1, 0) as most_recent_date
 
 from
     {{ ref('us_state_county_daily_volume') }}
