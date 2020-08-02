@@ -39,7 +39,7 @@ rolling as (
 select
     new_calcs.* except(most_recent_date),
 
-    {{ calculate_rolling_metrics(state_7_days) }}
+    {{ calculate_rolling_metrics('state_7_days') }}
 
     -- Keeping consistent with other table schemas
     most_recent_date
