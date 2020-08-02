@@ -1,9 +1,3 @@
-{{
-  config(
-    materialized = 'incremental',
-    incremental_strategy = 'insert_overwrite'
-  )
-}}
 
 {#
 Would use {{ this }} rather than manually defining max date but finding issue

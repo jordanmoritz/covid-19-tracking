@@ -38,7 +38,7 @@ and compares that against the current max date #}
     {% if max_partition_date is not none -%}
     where
         -- Date_sub to catch re-stating of previous days
-        source_date >= DATE_SUB('{{ max_partition_date }}', INTERVAL 3 DAY)
+        source_date >= DATE_SUB('{{ max_partition_date }}', INTERVAL 4 DAY)
     {%- endif %}
 
 {%- endcall -%}
@@ -51,6 +51,8 @@ and compares that against the current max date #}
 {%- if dates_to_unpivot | length == 0 -%}
     {%- set dates_to_unpivot = none -%}
 {%- endif -%}
+
+{# {{ log("dates_to_unpivot:" ~ dates_to_unpivot) }} #}
 
 {{ return(dates_to_unpivot) }}
 

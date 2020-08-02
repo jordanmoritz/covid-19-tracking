@@ -13,6 +13,8 @@ Args:
 {%- set date_string = date_value | string -%}
 {%- set date_split = date_string.split('-') -%}
 
+{# {{ log("date_split:" ~ date_split) }} #}
+
 {# Year #}
 {%- set year = date_split[0] -%}
 {%- set year_chars = year | list() -%}
@@ -28,9 +30,17 @@ Args:
 {%- endif -%}
 
 {# Day #}
-{%- set day_formatted = date_split[2] -%}
+{%- set day = date_split[2] -%}
+{%- set day_chars = day | list() -%}
+{%- if day_chars[0] == '0' -%}
+    {%- set day_formatted = day_chars[1] -%}
+{%- else -%}
+    {%- set day_formatted = day -%}
+{%- endif -%}
 
 {%- set formatted_date_column = '_' ~ month_formatted ~ '_' ~ day_formatted ~ '_' ~ year_formatted -%}
+
+{# {{ log("formatted_date_column:" ~ formatted_date_column) }} #}
 
 {{ return(formatted_date_column) }}
 
