@@ -50,5 +50,6 @@ on
 
 {% if is_incremental() and max_partition_date is not none %}
 where
-    date >= '{{ max_partition_date }}'
+    -- Date_sub to catch re-stating of previous days
+    date >= DATE_SUB('{{ max_partition_date }}', INTERVAL 3 DAY)
 {% endif %}
