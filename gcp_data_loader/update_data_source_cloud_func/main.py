@@ -1,5 +1,5 @@
 
-from google.cloud import bigquery
+from google.cloud import bigquery, pubsub_v1
 
 # These can move to environment variables or parsed
 # from request/event data when deployed
