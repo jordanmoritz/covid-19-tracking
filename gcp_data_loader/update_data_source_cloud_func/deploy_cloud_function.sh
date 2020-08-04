@@ -5,4 +5,5 @@ gcloud functions deploy update-data-source \
         --runtime='python37' \
         --service-account=$SERVICE_ACCOUNT_EMAIL \
         --source=$SOURCE_PATH \
+        --env-vars-file=$ENV_VARS_PATH \
         --trigger-http

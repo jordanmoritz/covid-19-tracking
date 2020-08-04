@@ -1,19 +1,13 @@
-
+import os, json
 from google.cloud import bigquery, pubsub_v1
 
-# These can move to environment variables or parsed
-# from request/event data when deployed
-destination_project_id = 'big-query-horse-play'
-destination_dataset_id = 'covid_sources'
-destination_tables_to_check = ['usafacts_confirmed_cases',
-                                'usafacts_deaths',
-                                'ecdc_daily_country_volume']
+destination_project_id = os.environ.get('DEST_PROJ_ID')
+destination_dataset_id = os.environ.get('DEST_DATASET_ID')
+destination_tables_to_check = json.loads(os.environ.get('DEST_TABLES_TO_CHECK'))
 
-source_project_id = 'bigquery-public-data'
-source_dataset_id = ['covid19_usafacts', 'covid19_ecdc']
-source_tables_to_check = ['confirmed_cases',
-                        'deaths',
-                        'covid_19_geographic_distribution_worldwide']
+source_project_id = os.environ.get('SOURCE_PROJ_ID')
+source_dataset_id = json.loads(os.environ.get('SOURCE_DATASET_ID'))
+source_tables_to_check = json.loads(os.environ.get('SOURCE_TABLES_TO_CHECK'))
 
 class DataSource:
     """
@@ -82,7 +76,22 @@ class DataSource:
         query_job = self.destination_client.query(query, job_config=job_config)
         query_job.result()
 
+def post_message_to_topic(message, project_id, topic_id):
+    publisher_client = pubsub_v1.PublisherClient()
+    topic_path = publisher_client.topic_path(project_id, topic_id)
+    message_data = message.encode('utf-8')
+
+    def callback(future):
+        message_id = future.result()
+        print('Message id: ', message_id)
+
+    future = publisher_client.publish(topic_path, data=message_data)
+    future.add_done_callback(callback)
+
 def check_data_source_update(data_source_list):
+    # Counter used by pubsub message
+    data_sources_updated = 0
+
     # Handling this piece here because of cache behavior of global variables
     for data_source in data_source_list:
 
@@ -105,9 +114,12 @@ def check_data_source_update(data_source_list):
             data_source.job_config = data_source.update_job_config()
             data_source.update_data_source(data_source.job_config)
             print('Data Source Updated: ', f'{data_source.destination_fully_qualified_table_name}')
+            data_sources_updated += 1
         else:
             print('Data Source not updated, source table not refreshed:\n',
                     f'{data_source.source_fully_qualified_table_name}')
+
+    return data_sources_updated
 
 state_county_cases = DataSource(
                 destination_project_id,
@@ -139,6 +151,16 @@ data_source_list = [state_county_cases, state_county_deaths, country_daily_volum
 # request/event data to drive the function, but just spoofing behavior with this
 def main(request):
     if request:
-        check_data_source_update(data_source_list)
+        data_sources_updated = check_data_source_update(data_source_list)
+
+        # If any data sources were actually updated, post to pubsub topic
+        # for subseqeuent processing in dbt
+        if data_sources_updated > 0:
+            message = f'{data_sources_updated} data sources updated'
+
+            post_message_to_topic(message,
+                            os.environ.get('TOPIC_PROJ_ID'),
+                            os.environ.get('TOPIC_ID'))
+
         # Acknowleding request
         return 'Roger that'
