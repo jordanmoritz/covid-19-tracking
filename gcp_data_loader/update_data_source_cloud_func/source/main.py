@@ -83,7 +83,7 @@ def post_message_to_topic(message, project_id, topic_id):
 
     def callback(future):
         message_id = future.result()
-        print('Message id: ', message_id)
+        print('Pub/sub message id: ', message_id)
 
     future = publisher_client.publish(topic_path, data=message_data)
     future.add_done_callback(callback)
