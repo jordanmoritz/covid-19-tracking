@@ -33,6 +33,7 @@ from
 inner join
     {{ ref('usafacts_us_state_county_daily_deaths') }} as deaths
 on
+    -- State included because of unallocated county groups
     cases.state_fips_code = deaths.state_fips_code
     and cases.county_geo_id = deaths.county_geo_id
     and cases.date = deaths.date

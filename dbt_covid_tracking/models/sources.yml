@@ -4,13 +4,66 @@ sources:
   - name: covid_sources
     tables:
       - name: usafacts_confirmed_cases
+        description: >
+          Daily US state & county confirmed cases data from USAFacts. Pivoted
+          with a string formatted date value for each day.
+        columns:
+          - name: county_fips_code
+            tests:
+              - unique_county_id
+              - not_null
+
       - name: usafacts_deaths
+        description: >
+          Daily US state & county death data from USAFacts. Pivoted
+          with a string formatted date value for each day.
+        columns:
+          - name: county_fips_code
+            tests:
+              - unique_county_id
+              - not_null
+
       - name: ecdc_daily_country_volume
+        description: Daily country-level case and death data from ECDC.
 
   - name: mapping
     tables:
       - name: us_states_fips_codes
+        description: List of US states and corresponding geo codes/ids.
+        columns:
+          - name: state_fips_code
+            tests:
+              - unique
+              - not_null
+
       - name: us_county_fips_codes
+        description: List of US counties and corresponding geo codes/ids.
+        columns:
+          - name: geo_id
+            tests:
+              - unique
+              - not_null
+
       - name: us_county_pop_2018_5yr_census
+        description: US county population data from Census ACS - 2018 5yr.
+        columns:
+          - name: geo_id
+            tests:
+              - unique
+              - not_null
+
       - name: us_state_pop_2018_5yr_census
+        description: US state population data from Census ACS - 2018 5yr.
+        columns:
+          - name: state_fips_code
+            tests:
+              - unique
+              - not_null
+
       - name: country_codes
+        description: List of countries and 3 digit country codes.
+        columns:
+          - name: country_code
+            tests:
+              - unique
+              - not_null
