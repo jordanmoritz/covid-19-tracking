@@ -12,7 +12,7 @@ sources:
             tests:
               - unique_county_id
               - malformed_county_id:
-                  severity: WARN
+                  severity: warn
               - not_null
           - name: state_fips_code
             tests:
