@@ -4,6 +4,9 @@ models:
   - name: usafacts_us_state_county_daily_cases
     description: '{{ doc("daily_cases_deaths_incremental") }}'
     columns:
+      - name: date
+        tests:
+            - expected_min_date
       - name: state_fips_code
         tests:
             - malformed_state_code
@@ -16,6 +19,9 @@ models:
   - name: usafacts_us_state_county_daily_deaths
     description: '{{ doc("daily_cases_deaths_incremental") }}'
     columns:
+      - name: date
+        tests:
+            - expected_min_date
       - name: state_fips_code
         tests:
             - malformed_state_code
