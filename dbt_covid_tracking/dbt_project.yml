@@ -25,18 +25,24 @@ models:
 
       cleansed:
           +schema: cleansed
+          +labels:
+              type: cleansed
           +partition_by:
               field: date
               data_type: date
 
       joined:
           +schema: joined
+          +labels:
+              type: joined
           +partition_by:
               field: date
               data_type: date
 
       presentation:
           +schema: presentation
+          +labels:
+              type: presentation
           +partition_by:
               field: date
               data_type: date

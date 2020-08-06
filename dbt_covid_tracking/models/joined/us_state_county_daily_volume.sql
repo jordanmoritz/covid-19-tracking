@@ -1,7 +1,8 @@
 {{
   config(
     materialized = 'incremental',
-    incremental_strategy = 'insert_overwrite'
+    incremental_strategy = 'insert_overwrite',
+    labels = {'type': 'joined', 'incremental': ''}
   )
 }}
 

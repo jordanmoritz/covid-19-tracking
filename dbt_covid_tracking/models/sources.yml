@@ -12,10 +12,12 @@ sources:
             tests:
               - unique_county_id
               - malformed_county_id
+                  severity: warn
               - not_null
           - name: state_fips_code
             tests:
               - malformed_state_code
+                  severity: warn
               - not_null
 
       - name: usafacts_deaths
@@ -27,10 +29,12 @@ sources:
             tests:
               - unique_county_id
               - malformed_county_id
+                  severity: warn
               - not_null
           - name: state_fips_code
             tests:
               - malformed_state_code
+                  severity: warn
               - not_null
 
       - name: ecdc_daily_country_volume
