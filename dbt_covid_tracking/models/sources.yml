@@ -11,6 +11,11 @@ sources:
           - name: county_fips_code
             tests:
               - unique_county_id
+              - malformed_county_id
+              - not_null
+          - name: state_fips_code
+            tests:
+              - malformed_state_code
               - not_null
 
       - name: usafacts_deaths
@@ -21,10 +26,19 @@ sources:
           - name: county_fips_code
             tests:
               - unique_county_id
+              - malformed_county_id
+              - not_null
+          - name: state_fips_code
+            tests:
+              - malformed_state_code
               - not_null
 
       - name: ecdc_daily_country_volume
         description: Daily country-level case and death data from ECDC.
+        columns:
+          - name: country_territory_code
+            tests:
+              - malformed_country_code
 
   - name: mapping
     tables:

@@ -1,7 +1,58 @@
 version: 2
 
 models:
-  - name: us_state_county_daily_cases
+  - name: usafacts_us_state_county_daily_cases
     description: '{{ doc("daily_cases_deaths_incremental") }}'
-  - name: us_state_county_daily_deaths
+    columns:
+      - name: state_fips_code
+        tests:
+            - malformed_state_code
+            - not_null
+      - name: county_geo_id
+        tests:
+            - malformed_county_id
+            - not_null
+
+  - name: usafacts_us_state_county_daily_deaths
     description: '{{ doc("daily_cases_deaths_incremental") }}'
+    columns:
+      - name: state_fips_code
+        tests:
+            - malformed_state_code
+            - not_null
+      - name: county_geo_id
+        tests:
+            - malformed_county_id
+            - not_null
+
+  - name: ecdc_country_daily_volume
+    description: Cleaned and transformed daily country-level data from ECDC
+    columns:
+      - name: country_territory_code
+        tests:
+            - malformed_country_code
+
+  - name: us_state_county_daily_volume
+    description: Joined up daily county-level cases and deaths
+    columns:
+      - name: cumulative_cases
+        tests:
+            - not_null
+      - name: cumulative_deaths
+        tests:
+            - not_null
+
+  - name: us_state_county_daily_summary
+    description: >
+      Summarized daily county-level cases with calculated metrics, e.g.
+      rolling metrics, per capita
+
+  - name: us_state_daily_summary
+    description: >
+      Summarized daily cases aggregated at state level with calculated metrics,
+      e.g. rolling metrics, per capita
+
+  - name: country_daily_summary
+    description: >
+      Summarized daily country-level cases with calculated metrics, e.g.
+      rolling metrics, per capita
