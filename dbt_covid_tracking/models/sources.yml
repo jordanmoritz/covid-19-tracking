@@ -11,12 +11,12 @@ sources:
           - name: county_fips_code
             tests:
               - unique_county_id
-              - malformed_county_id
-                  severity: warn
+              - malformed_county_id:
+                  severity: WARN
               - not_null
           - name: state_fips_code
             tests:
-              - malformed_state_code
+              - malformed_state_code:
                   severity: warn
               - not_null
 
@@ -28,12 +28,12 @@ sources:
           - name: county_fips_code
             tests:
               - unique_county_id
-              - malformed_county_id
+              - malformed_county_id:
                   severity: warn
               - not_null
           - name: state_fips_code
             tests:
-              - malformed_state_code
+              - malformed_state_code:
                   severity: warn
               - not_null
 
