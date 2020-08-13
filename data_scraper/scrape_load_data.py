@@ -9,7 +9,7 @@ destination_dataset_id = os.environ.get('GCP_DEST_DATASET_ID')
 
 us_war = {
     'url': 'https://en.wikipedia.org/wiki/United_States_military_casualties_of_war',
-    'destination_table_name': 'us_war_casualties'
+    'destination_table_name': 'us_military_war_casualties'
     }
 
 us_vehicle = {
