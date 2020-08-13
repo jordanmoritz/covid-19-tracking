@@ -62,3 +62,8 @@ models:
     description: >
       Summarized daily country-level cases with calculated metrics, e.g.
       rolling metrics, per capita
+
+  - name: us_causes_death_comparison
+    description: >
+      Annual leading causes of death via CDC, with last 7 year average motor
+      vehicle deaths, and current total deaths from COVID-19.
