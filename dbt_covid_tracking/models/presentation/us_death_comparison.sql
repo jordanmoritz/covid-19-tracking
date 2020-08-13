@@ -51,7 +51,13 @@ union all
 -- US military deaths
 select
     'military_deaths' as comparison_type,
-    if(war_name = 'American Revolutionary War', 'Revolutionary War', war_name) as reason_for_death,
+    -- Mapping for front-end values
+    case
+        when war_name = 'American Revolutionary War' then 'Revolutionary War'
+        when war_name = 'American Civil War' then 'Civil War'
+        else war_name
+        end
+        as reason_for_death,
     total_deaths
 from
     {{ source('united_states_comparisons', 'us_military_war_casualties') }}
