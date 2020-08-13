@@ -85,3 +85,18 @@ sources:
             tests:
               - unique
               - not_null
+
+  - name: united_states_comparisons
+    tables:
+      - name: cdc_us_influenza_burden
+        description: CDC data on annual influenza season estimated deaths.
+      - name: cdc_us_leading_causes_death
+        description: CDC data on leading causes of death in the US.
+      - name: us_motor_vehicle_fatalities
+        description: >
+          Data compiled on Wikipedia from numerous sources on US annual
+          motor vehicle fatalities.
+      - name: us_military_war_casualties
+        description: >
+          Data compiled on Wikipedia from numerous sources on US military
+          casualties by war.
