@@ -1,3 +1,11 @@
+{{
+  config(
+    partition_by={
+      'field': 'date',
+      'data_type': 'date'
+    }
+  )
+}}
 
 -- Calculating per capita and rolling metrics
 with rolling as (

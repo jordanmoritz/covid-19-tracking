@@ -43,6 +43,3 @@ models:
           +schema: presentation
           +labels:
               type: presentation
-          +partition_by:
-              field: date
-              data_type: date

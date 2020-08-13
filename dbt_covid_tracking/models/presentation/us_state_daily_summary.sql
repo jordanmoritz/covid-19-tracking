@@ -1,3 +1,11 @@
+{{
+  config(
+    partition_by={
+      'field': 'date',
+      'data_type': 'date'
+    }
+  )
+}}
 
 -- Aggregation of US data at state level granularity
 with state as (

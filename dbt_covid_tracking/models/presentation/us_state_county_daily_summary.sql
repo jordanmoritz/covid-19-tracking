@@ -1,3 +1,11 @@
+{{
+  config(
+    partition_by={
+      'field': 'date',
+      'data_type': 'date'
+    }
+  )
+}}
 
 -- Calculating new cases/deaths metrics
 with new_calcs as (
