@@ -13,7 +13,7 @@ with vehicle_fatalities as (
 
 -- Motor vehicle fatalities
 select
-  'Motor Vehicle Deaths' as cause_of_death,
+  'Motor Vehicle Death' as cause_of_death,
   cast(avg(total_deaths) as int64) as total_deaths
 from
   vehicle_fatalities
@@ -24,12 +24,24 @@ union all
 
 -- CDC leading cause of death
 select
-    *
+    -- Mapping for cleaner front-end values
+    case
+        when cause_of_death like '%respiratory%' then 'Respiratory Disease'
+        when cause_of_death like '%Accidents%' then 'Unintentional Accidents'
+        when cause_of_death like '%Alzheimer%' then 'Alzheimer’s'
+        when cause_of_death like '%Heart%' then 'Heart Disease'
+        when cause_of_death like '%suicide%' then 'Suicide'
+        when cause_of_death like '%nephrosis%' then 'Nephrosis Related'
+        when cause_of_death like '%Stroke%' then 'Stroke'
+        else cause_of_death
+        end
+        as cause_of_death,
+    total_deaths
 from
     {{ source('united_states_comparisons', 'cdc_us_leading_causes_death') }}
 where
     -- Excluding because will have entire section dedicated to influenza
-    cause_of_death != 'influenza and pneumonia'
+    cause_of_death != 'Influenza and pneumonia'
 
 union all
 
