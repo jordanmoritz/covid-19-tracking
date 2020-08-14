@@ -3,11 +3,11 @@ All relevant resources related to this [COVID-19 Case Tracker dashboard](https:/
 Built using dbt for orchestrating data transformation and managing pipelines. Various GCP tools (BigQuery, Cloud Functions, Pub/Sub, etc.). BeautifulSoup, requests, and pandas for web scraping. Data Studio for dashboard front-end.
 
 **Consists of the following elements:**
-- [Data loader](### data-loader)
-- [Web scraping](### web-scraping)
-- [Production run trigger](### production-run-trigger)
-- [dbt](### dbt)
-- [Exploratory work](### exploratory-work)
+- [Data loader](# data-loader)
+- [Web scraping](# web-scraping)
+- [Production run trigger](# production-run-trigger)
+- [dbt](# dbt)
+- [Exploratory work](# exploratory-work)
 
 ### Data Loader
 Uses Cloud Scheduler to regularly invoke Cloud Function that checks for updates to underlying data sources. As refreshed data is available, loads updated data into destination tables in BigQuery. On success, posts message to Pub/Sub topic.
