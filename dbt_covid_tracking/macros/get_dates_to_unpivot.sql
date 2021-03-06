@@ -19,7 +19,7 @@ and compares that against the current max date #}
       select
 
           {%- set date_parts = column.split('_') %}
-          parse_date('%m/%d/%y',
+          parse_date('%E4Y/%m/%d',
                   '{{ date_parts[1] }}/{{ date_parts[2] }}/{{ date_parts[3] }}')
                   as source_date
 
@@ -37,8 +37,8 @@ and compares that against the current max date #}
 
     {% if max_partition_date is not none -%}
     where
-        -- Date_sub to catch re-stating of previous days
-        source_date >= DATE_SUB('{{ max_partition_date }}', INTERVAL 4 DAY)
+        -- date_sub to catch re-stating of previous days
+        source_date >= date_sub('{{ max_partition_date }}', interval 4 day)
     {%- endif %}
 
 {%- endcall -%}

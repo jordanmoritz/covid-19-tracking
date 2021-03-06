@@ -16,29 +16,35 @@ Args:
 {# {{ log("date_split:" ~ date_split) }} #}
 
 {# Year #}
-{%- set year = date_split[0] -%}
-{%- set year_chars = year | list() -%}
-{%- set year_formatted = year_chars[2] ~ year_chars[3] -%}
+{%- set year_formatted = date_split[0] -%}
+
+{# Q1 2021 format of source data changed making this unnecessary #}
+{# %- set year_chars = year | list() -% #}
+{# %- set year_formatted = year_chars[2] ~ year_chars[3] -% #}
 
 {# Month #}
-{%- set month = date_split[1] -%}
-{%- set month_chars = month | list() -%}
-{%- if month_chars[0] == '0' -%}
-    {%- set month_formatted = month_chars[1] -%}
-{%- else -%}
-    {%- set month_formatted = month -%}
-{%- endif -%}
+{%- set month_formatted = date_split[1] -%}
+
+{# Q1 2021 format of source data changed making this unnecessary #}
+{# %- set month_chars = month | list() -% #}
+{# %- if month_chars[0] == '0' -% #}
+    {# %- set month_formatted = month_chars[1] -% #}
+{# %- else -% #}
+    {# %- set month_formatted = month -% #}
+{# %- endif -% #}
 
 {# Day #}
-{%- set day = date_split[2] -%}
-{%- set day_chars = day | list() -%}
-{%- if day_chars[0] == '0' -%}
-    {%- set day_formatted = day_chars[1] -%}
-{%- else -%}
-    {%- set day_formatted = day -%}
-{%- endif -%}
+{%- set day_formatted = date_split[2] -%}
 
-{%- set formatted_date_column = '_' ~ month_formatted ~ '_' ~ day_formatted ~ '_' ~ year_formatted -%}
+{# Q1 2021 format of source data changed making this unnecessary #}
+{# %- set day_chars = day | list() -% #}
+{# %- if day_chars[0] == '0' -% #}
+    {# %- set day_formatted = day_chars[1] -% #}
+{# %- else -% #}
+    {# %- set day_formatted = day -% #}
+{# %- endif -% #}
+
+{%- set formatted_date_column = '_' ~ year_formatted ~ '_' ~ month_formatted ~ '_' ~ day_formatted -%}
 
 {# {{ log("formatted_date_column:" ~ formatted_date_column) }} #}
 

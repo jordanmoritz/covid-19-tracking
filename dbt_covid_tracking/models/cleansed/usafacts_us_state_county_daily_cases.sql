@@ -26,7 +26,7 @@
     select
 
         {%- set date_parts = column.split('_') %}
-        parse_date('%m/%d/%y',
+        parse_date('%E4Y/%m/%d',
                   '{{ date_parts[1] }}/{{ date_parts[2] }}/{{ date_parts[3] }}')
                   as date,
 
